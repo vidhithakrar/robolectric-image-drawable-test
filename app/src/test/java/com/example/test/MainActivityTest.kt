@@ -21,6 +21,7 @@ class MainActivityTest {
     fun testImage() {
         launchActivity<MainActivity>()
 
+        // Below assertion should fail as R.drawable.ic_home_black_24dp is set
         onView(withId(R.id.image)).check(matches(withDrawableRes(R.drawable.ic_android_black_24dp)))
     }
 
