@@ -1,0 +1,2 @@
+rootProject.name = "robolectric-image-drawable-test"
+include ':app'
