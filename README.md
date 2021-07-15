@@ -1,0 +1,1 @@
+# robolectric-image-drawable-test
