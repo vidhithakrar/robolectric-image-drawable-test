@@ -3,7 +3,7 @@ package com.example.test
 import android.view.View
 import android.widget.ImageView
 import androidx.annotation.DrawableRes
-import androidx.core.graphics.drawable.toBitmap
+import androidx.core.content.ContextCompat
 import androidx.test.core.app.launchActivity
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.assertion.ViewAssertions.matches
@@ -31,11 +31,20 @@ class MainActivityTest {
                 description.appendText("has drawable resource: $id")
             }
 
-            override fun matchesSafely(item: ImageView): Boolean {
-                val expectedBitmap = item.context.getDrawable(id)?.toBitmap()
-                val actualBitmap = item.drawable.toBitmap()
-                return actualBitmap.sameAs(expectedBitmap)
-            }
+            // The below code does not work as expected in Robolectric for VectorDrawable,
+            // where pixels are being matched
 
+//            override fun matchesSafely(item: ImageView): Boolean {
+//                val expectedBitmap = item.context.getDrawable(id)?.toBitmap()
+//                val actualBitmap = item.drawable.toBitmap()
+//                return actualBitmap.sameAs(expectedBitmap)
+//            }
+
+            // As per https://github.com/robolectric/robolectric/issues/6620,
+            // The below workaround works on Robolectric
+            override fun matchesSafely(item: ImageView): Boolean {
+                val drawable = ContextCompat.getDrawable(item.context, id)
+                return item.drawable.constantState == drawable?.constantState
+            }
         }
 }
